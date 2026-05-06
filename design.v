@@ -117,7 +117,7 @@ else begin
            4'b0011:             // CMD = 0011: SUB_CIN. Here we set the overflow flag
            begin
 		if(INP_VALID==2'b11) begin
-                   OFLOW<=(opa_r<opb_r)?1:0;
+                   OFLOW<=(opa_r<(opb_r+CIN))?1:0;
                    RES<=opa_r-opb_r-CIN;
 		end
 		else begin
