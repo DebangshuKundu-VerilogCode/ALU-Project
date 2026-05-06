@@ -46,6 +46,21 @@ always @(posedge CLK or posedge RST) begin
     end
 end
 
+always @(posedge CLK or posedge RST) begin
+    if (RST) begin
+        opa_r <= 0;
+        opb_r <= 0;
+        cmd_r <= 0;
+        mode_r <= 0;
+    end
+    else if (CE) begin
+        opa_r <= OPA;
+        opb_r <= OPB;
+        cmd_r <= CMD;
+        mode_r <= MODE;
+    end
+end
+
   
     always@(posedge CLK or posedge RST)
       begin
@@ -64,7 +79,7 @@ end
           end
 else begin
    if(CE)  begin                 // If clock enable is active high then check for other control signals
-        if(MODE) begin          // Reset signal is active low. If MODE signal is high, then this is an Arithmetic Operation
+        if(mode_r) begin          // Reset signal is active low. If MODE signal is high, then this is an Arithmetic Operation
             RES<={RES_W{1'b0}};
             COUT<=1'b0;
             OFLOW<=1'b0;
@@ -74,7 +89,7 @@ else begin
             ERR<=1'b0;
             opa_r<=OPA;
             opb_r<=OPB;
-           case(CMD)             // CMD is the binary code value of the Arithmetic Operation
+           case(cmd_r)             // CMD is the binary code value of the Arithmetic Operation
            4'b0000:             // CMD = 0000: ADD 
             begin 
 		if(INP_VALID==2'b11) 
@@ -314,7 +329,7 @@ end
            ERR<=1'b0;
            opa_r<=OPA;
            opa_r<=OPB;
-           case(CMD)    
+           case(cmd_r)    
              4'b0000: begin
 		if(INP_VALID==2'b11) begin
 			RES <= {{(RES_W-WIDTH){1'b0}}, (OPA & OPB)};   // CMD = 0000: AND
