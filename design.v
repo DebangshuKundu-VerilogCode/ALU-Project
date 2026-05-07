@@ -1,4 +1,4 @@
-lu #(parameter WIDTH=8)(OPA,OPB,CIN,CLK,RST,CMD,CE,MODE,INP_VALID,COUT,OFLOW,RES,G,E,L,ERR);
+module alu #(parameter WIDTH=8)(OPA,OPB,CIN,CLK,RST,CMD,CE,MODE,INP_VALID,COUT,OFLOW,RES,G,E,L,ERR);
 
 
 //Input output port declaration
