@@ -4,7 +4,6 @@
 
 module alu_tb;
 parameter WIDTH=8;
-
     // DUT signals
     reg [WIDTH-1:0] OPA, OPB;
     reg CLK, RST, CE, MODE, CIN;
@@ -27,10 +26,12 @@ parameter WIDTH=8;
      alu_design #(WIDTH) m1(.clk(CLK),.rst(RST),.mode(MODE),.ce(CE),.cin(CIN),
         .opa(OPA),.opb(OPB),.inp_valid(INV), .cmd(CMD),
         .res(RES_dut), .oflow(OFLOW_dut),.cout(COUT_dut), .g(G_dut), .l(L_dut),                                                                                                              .e(E_dut), .err(ERR_dut));
+
+
     // Reference model instantiation
     alu_reference_model #(WIDTH) m2(
-        .OPA(OPA), .OPB(OPB),.CE(CE), .CIN(CIN),
-        .MODE(MODE), .CMD(CMD),.clk(CLK),.RST(RST),
+        .OPA(OPA), .OPB(OPB), .CIN(CIN),.clk(CLK),.RST(RST),
+        .MODE(MODE), .CMD(CMD),
         .RES(RES_ref),.INP_VALID(INV),
         .COUT(COUT_ref), .OFLOW(OFLOW_ref),
         .G(G_ref), .E(E_ref), .L(L_ref),
@@ -348,8 +349,7 @@ task test_mult();
                         pass_count = pass_count + 1;
                         display_mismatch();
                     end else begin
-                        $display("[FAIL] %s: OPA=0x%h OPB=0x%h CMD=0x%h",test_name, a, b, cmd);
-                         display_mismatch();
+                        $display("[FAIL] %s: OPA=0x%h OPB=0x%h CMD=0x%h",test_name, a, b, cmd);display_mismatch();
                         fail_count = fail_count + 1;
                     end
                     @(posedge CLK);
@@ -482,9 +482,8 @@ task test_mult();
                 $display("  DUT: RES=0x%h COUT=%b OFLOW=%b G=%b E=%b L=%b ERR=%b                                                                                                             ", RES_dut, COUT_dut, OFLOW_dut, G_dut, E_dut, L_dut, ERR_dut);
                 $display("  REF: RES=0x%h COUT=%b OFLOW=%b G=%b E=%b L=%b ERR=%b                                                                                                             ",RES_ref, COUT_ref, OFLOW_ref, G_ref, E_ref, L_ref, ERR_ref);
             end else begin
-                $display(" DUT: RES=0x%h COUT=%b OFLOW=%b G=%b E=%b L=%b ERR=%b", RES_dut, COUT_dut, OFLOW_dut, G_dut, E_dut, L_dut, ERR_dut);
-$display("  HELD: RES=0x%h COUT=%b OFLOW=%b G=%b E=%b L=%b ERR=%b", RES_hold, COUT_hold, OFLOW_hold, G_hold, E_hold, L_hold, ERR_hold);
-            end
+                $display("   DUT: RES=0x%h COUT=%b OFLOW=%b G=%b E=%b L=%b ERR=%b", RES_dut, COUT_dut, OFLOW_dut, G_dut, E_dut, L_dut, ERR_dut);                $display("  HELD: RES=0x%h COUT=%b OFLOW=%b G=%b E=%b L=%b ERR=%b", RES_hold, COUT_hold, OFLOW_hold, G_hold, E_hold, L_hold, ERR_hold);
+end
         end
     endtask
 
